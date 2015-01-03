@@ -1,0 +1,42 @@
+#summary One-sentence summary of this page.
+#labels Phase-Deploy
+
+= Introduction =
+
+how to update rasbian distribution on Raspberry Pi
+
+
+= Details =
+
+How Can I keep My Raspbian “Wheezy” Up to Date?
+
+http://raspberrypi.stackexchange.com/questions/4698/how-can-i-keep-my-raspbian-wheezy-up-to-date
+
+*Dist:*
+
+$ sudo apt-get update
+$ sudo apt-get upgrade 
+
+
+*Rpi-update first time:* install git and certifications for reach github.
+
+{{{
+$ sudo apt-get install ca-certificates
+$ sudo apt-get install git-core
+$ sudo wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update
+$ sudo chmod +x /usr/bin/rpi-update
+}}}
+
+*Update firmware:*
+{{{
+$ sudo rpi-update
+$ sudo ldconfig
+$ sudo reboot
+}}}
+
+*Rpi-update after:*
+{{{
+$ sudo rpi-update
+$ sudo ldconfig
+$ sudo reboot
+}}}
