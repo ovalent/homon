@@ -3,7 +3,7 @@
 
 = Introduction =
 
-How to backup Raspberry Pi SD card.
+How to backup Raspberry Pi's SD card.
 
 
 = Details =
