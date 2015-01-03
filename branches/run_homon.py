@@ -1,22 +1,24 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
-from cpu_temperature import Cpu_temperature
-from time import sleep
+from cpu_temperature import Sensor_temperature_cpu
+import time
+import datetime
 
-class Example(object):
-    def run(self):
-        print "Hello, world!"
-        
+class Welcome(object):
+    def __init__(self):
+        print "Welcome to Homon!"        
 
 
 if __name__ == '__main__':
-  Example().run()
+  Welcome()
+  
+  s_temp_cpu = Sensor_temperature_cpu()
   while 1:  
     
     #get CPU sensor value
-    var_cpu_temp = Cpu_temperature().get_sensor_value()
-    print Cpu_temperature().sensor_name + ": " + str(var_cpu_temp) + " " + Cpu_temperature().sensor_unit
+    var_cpu_temp = s_temp_cpu.get_sensor_value()
+    print datetime.datetime.now().isoformat() + " - " + s_temp_cpu.sensor_name + ": " + str(var_cpu_temp) + " " + s_temp_cpu.sensor_unit
 
-    sleep(2)
+    time.sleep(2)
 
