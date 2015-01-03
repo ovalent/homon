@@ -5,7 +5,9 @@ import subprocess
 #import os
 
 class Cpu_temperature(object):  
-  def get_temperature(self):
+  sensor_name = "CPU temperature"
+  sensor_unit = "ºC"
+  def get_sensor_value(self):
       #"Returns the temperature in degrees C"
       try:
 	  s = subprocess.check_output(["/opt/vc/bin/vcgencmd","measure_temp"])
