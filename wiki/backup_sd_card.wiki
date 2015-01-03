@@ -8,9 +8,8 @@ How to backup Raspberry Pi SD card.
 
 = Details =
 
-# Extract the SD card from your Raspberry Pi and plug it into a linux computer (USB).
-#We assume that the SD card is now identified in /dev/sdb.
-#Execute the scipt [https://code.google.com/p/homon/source/browse/branches/extra/backup_sd.bash back_sd.bash]
+ # Extract the SD card from your Raspberry Pi and plug it into a linux computer (USB). We assume that the SD card is now identified in /dev/sdb.
+ # Execute the script [https://code.google.com/p/homon/source/browse/branches/extra/backup_sd.bash back_sd.bash]
 
 SD backups compressed and stored in folder ../raspberry/sd_images/
 
