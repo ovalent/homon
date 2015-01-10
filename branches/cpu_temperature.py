@@ -5,9 +5,9 @@ import subprocess
 
 class Sensor_temperature_cpu(object):  
   
-  sensor_name = "CPU temperature"
-  
+  sensor_name = "CPU temperature"  
   sensor_unit = "ºC"
+  sensor_desc = "onboard Raspberry Pi B+"
   
   def get_sensor_value(self):
       #"Returns the temperature in degrees celcius"
