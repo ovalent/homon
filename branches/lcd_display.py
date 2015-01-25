@@ -38,7 +38,7 @@ class LCD_display(object):
         self.lcd.setCursor(0, 1)
         #display the message and value
         self.lcd.message("Temperature: %.2f" % text)
-        self.lcd.write4bits( 0xDF, True)
+        self.lcd.write4bits( 0xDF, True) #display the degree symbol "°"
         self.lcd.message("C")
         
     def humidity(self, text):
