@@ -20,7 +20,9 @@ class LCD_display(object):
 
         # Create LCD, passing in MCP GPIO adapter.
         self.lcd = Adafruit_CharLCD(pin_rs=1, pin_e=2, pin_bl=7, pins_db=[3,4,5,6], GPIO=mcp)
-
+        self.initialisation()
+    
+    def initialisation(self):
         self.lcd.clear()
         self.lcd.begin(self.num_columns, self.num_lines)
         self.lcd.backlightOn()

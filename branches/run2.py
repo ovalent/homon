@@ -111,8 +111,17 @@ def mLoop():
     Main code
 '''
 
-display_lcd.line_message(2, "   Initializing...")
-initSensors()
-mLoop()
+if __name__ == '__main__':
+    try:
+        display_lcd.line_message(2, "   Initializing...")
+        initSensors()
+        mLoop()
+    finally:
+        display_lcd.initialisation()
+        display_lcd.line_message(2, "      Stopped")
+        time.sleep(3)
+        display_lcd.lcd.backlightOff()
+        
+    
 
 
