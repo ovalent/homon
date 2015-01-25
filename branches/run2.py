@@ -1,6 +1,18 @@
 #!/usr/bin/env python2.7
 # -*- coding: utf-8 -*-
 
+'''
+************************************************************
+Sensor drivers from SyntroPython:
+Check out https://github.com/richards-tech/SyntroPython for more details and installation instructions.
+Note: in place of:
+"sudo apt-get git build-essential qt4-default python-dev"
+use this command:
+"sudo apt-get install git build-essential qt4-dev-tools python-dev"
+Thank you to www.richards-tech.com
+************************************************************
+'''
+
 import sys
 
 # import the sensor drivers
@@ -16,21 +28,16 @@ SENSOR_UPDATE_INTERVAL = 5
 
 # The set of sensors. Choose which ones are required or use NullSensor if no physical sensor
 # Multi sensor objects (such as BMP180 for temp and pressure) can be reused
-
-light = RT_TSL2561.RT_TSL2561()
-temperature = RT_MCP9808.RT_MCP9808()
-pressure = RT_BMP180.RT_BMP180()
-humidity = RT_HTU21D.RT_HTU21D()
+#s_dummy = RT_DUMMY.RT_NullSensor()
+s_light = RT_TSL2561.RT_TSL2561()
+s_temperature = RT_MCP9808.RT_MCP9808()
+s_pressure = RT_BMP180.RT_BMP180()
+s_humidity = RT_HTU21D.RT_HTU21D()
 
 # Now import what we need
-
-#import SyntroPython
-#import SyntroPythonPy
 import time
 import datetime
 
-
-    
 '''
 ------------------------------------------------------------
     Sensor functions
@@ -40,20 +47,20 @@ import datetime
 lastSensorReadTime = time.time() 
 
 def initSensors():
-    light.enable()
-    temperature.enable()
-    pressure.enable()
-    humidity.enable()
+    s_light.enable()
+    s_temperature.enable()
+    s_pressure.enable()
+    s_humidity.enable()
 
 def readSensors():
     global lastSensorReadTime
     
     if ((time.time() - lastSensorReadTime) < SENSOR_UPDATE_INTERVAL):
         # call background loops
-        light.background()
-        temperature.background()
-        pressure.background()
-        humidity.background()
+        s_light.background()
+        s_temperature.background()
+        s_pressure.background()
+        s_humidity.background()
         return
         
     # time send send the sensor readings    
@@ -62,17 +69,17 @@ def readSensors():
    
     print(datetime.datetime.now().isoformat())
     
-    if light.getDataValid():
-        lightData = light.readLight()
+    if s_light.getDataValid():
+        lightData = s_light.readLight()
         print("Light: %.2f lux" % lightData)
-    if temperature.getDataValid():
-        temperatureData = temperature.readTemperature()
-        print("Temperature: %.2fC" % temperatureData)
-    if pressure.getDataValid():
-        pressureData = pressure.readPressure()
+    if s_temperature.getDataValid():
+        temperatureData = s_temperature.readTemperature()
+        print("Temperature: %.2f°C" % temperatureData)
+    if s_pressure.getDataValid():
+        pressureData = s_pressure.readPressure()
         print("Pressure: %.2fhPa" % pressureData)        
-    if humidity.getDataValid():
-        humidityData = humidity.readHumidity()
+    if s_humidity.getDataValid():
+        humidityData = s_humidity.readHumidity()
         print("Humidity: %.2f%%RH" % humidityData)    
 
 
@@ -80,7 +87,7 @@ def readSensors():
 
 '''
 ------------------------------------------------------------
-    pi camera functions and main loop
+    Main loop function
 '''
 
 def mLoop():
