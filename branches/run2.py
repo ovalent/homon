@@ -34,6 +34,10 @@ s_temperature = RT_MCP9808.RT_MCP9808()
 s_pressure = RT_BMP180.RT_BMP180()
 s_humidity = RT_HTU21D.RT_HTU21D()
 
+# import LCD class
+from lcd_display import LCD_display
+display_lcd = LCD_display()
+
 # Now import what we need
 import time
 import datetime
@@ -67,23 +71,22 @@ def readSensors():
     lastSensorReadTime = time.time()
     
    
-    print(datetime.datetime.now().isoformat())
-    
+    print(datetime.datetime.now().isoformat())    
     if s_light.getDataValid():
         lightData = s_light.readLight()
         print("Light: %.2f lux" % lightData)
     if s_temperature.getDataValid():
         temperatureData = s_temperature.readTemperature()
+        display_lcd.temperature(temperatureData)
         print("Temperature: %.2f°C" % temperatureData)
     if s_pressure.getDataValid():
         pressureData = s_pressure.readPressure()
+        display_lcd.pressure(pressureData)
         print("Pressure: %.2fhPa" % pressureData)        
     if s_humidity.getDataValid():
         humidityData = s_humidity.readHumidity()
+        display_lcd.humidity(humidityData)
         print("Humidity: %.2f%%RH" % humidityData)    
-
-
-
 
 '''
 ------------------------------------------------------------
@@ -94,6 +97,9 @@ def mLoop():
     ''' This is the main loop. '''
 
     while True:
+        # update the date on lcd
+        display_lcd.date()
+        
         # see if anything from the sensors
         readSensors()
             
@@ -105,6 +111,7 @@ def mLoop():
     Main code
 '''
 
+display_lcd.line_message(2, "   Initializing...")
 initSensors()
 mLoop()
 

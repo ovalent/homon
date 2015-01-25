@@ -5,6 +5,8 @@
 # lrvic - https://github.com/lrvick/raspi-hd44780/blob/master/hd44780.py
 # LiquidCrystal - https://github.com/arduino/Arduino/blob/master/libraries/LiquidCrystal/LiquidCrystal.cpp
 #
+# added Added backlight functionality from https://code.google.com/p/pi-radio/source/browse/Adafruit_CharLCD.py
+#
 
 from time import sleep
 
@@ -52,7 +54,12 @@ class Adafruit_CharLCD(object):
     LCD_1LINE               = 0x00
     LCD_5x10DOTS            = 0x04
     LCD_5x8DOTS             = 0x00
-
+    
+    # Truncation constants for message function truncate parameter.
+    NO_TRUNCATE       = 0
+    TRUNCATE          = 1
+    TRUNCATE_ELLIPSIS = 2
+    
     def __init__(self, pin_rs=25, pin_e=24, pin_bl=18, pins_db=[23, 17, 21, 22], GPIO=None):
         # Emulate the old behavior of using RPi.GPIO if we haven't been given
         # an explicit GPIO interface to use
@@ -203,13 +210,15 @@ class Adafruit_CharLCD(object):
             if char == '\n':
                 self.write4bits(0xC0)  # next line
             else:
-                self.write4bits(ord(char), True)
-                
+                self.write4bits(ord(char), True)              
+    
+            
     def backlightOn(self):
         self.GPIO.output(self.pin_bl,True)
 
     def backlightOff(self):
         self.GPIO.output(self.pin_bl,False)
+        
 
 if __name__ == '__main__':
     lcd = Adafruit_CharLCD()
