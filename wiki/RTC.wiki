@@ -65,8 +65,7 @@ HCTOSYS_DEVICE=rtc0
 # potential inconsistency at startup.
 unset TZ
 
-# changes from: http://www.elevendroids.com/2012/12/setting-up-hardware-rtc-in-raspbian/
-# change 20150128
+# change 20150128: from: http://www.elevendroids.com/2012/12/setting-up-hardware-rtc-in-raspbian/
 init_rtc_device()
 {
   [ -e /dev/rtc0 ] && return 0;
@@ -105,8 +104,7 @@ hwclocksh()
         # change 20150128
         init_rtc_device
 
-        # change 20150128
-        # Raspberry Pi doesn't have udev detectable RTC
+        # change 20150128: these 3 lines below are commented, because Raspberry Pi doesn't have udev detectable RTC
         #if [ -d /run/udev ] || [ -d /dev/.udev ]; then
         #    return 0
         #fi
