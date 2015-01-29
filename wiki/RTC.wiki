@@ -1,4 +1,4 @@
-#summary add RTC clock to Raspberry Pi B+.
+#summary Add RTC clock to Raspberry Pi B+.
 #labels Phase-Design,Featured
 
 = Introduction =
@@ -166,4 +166,10 @@ hwclocksh()
 }
 
 hwclocksh "$@"
+}}}
+
+Don't forget to disable fake-hwclock service and enable hwclock service:
+{{{
+sudo update-rc.d hwclock.sh enable
+sudo update-rc.d fake-hwclock disable
 }}}
