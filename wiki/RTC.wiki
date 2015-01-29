@@ -21,7 +21,9 @@ http://www.elevendroids.com/2012/12/setting-up-hardware-rtc-in-raspbian/
 
 Thank you to the author: elevendroids
 
-This the code I use in */etc/init.d/hwclock.sh*. Changes are notified elow the comments "# change 20150128" (3 changes):
+First you have to enable the I2C on your Raspeberry Pi, please check here for the detailled instructions: https://learn.adafruit.com/adafruits-raspberry-pi-lesson-4-gpio-setup/configuring-i2c
+
+This the code I use to update the file */etc/init.d/hwclock.sh*. Changes are notified below the comments "# change 20150128" (3 changes):
 {{{
 #!/bin/sh
 # hwclock.sh	Set and adjust the CMOS clock.
