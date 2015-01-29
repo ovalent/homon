@@ -1,0 +1,22 @@
+#summary add RTC clock to Raspberry Pi B+.
+#labels Phase-Design,Featured
+
+= Introduction =
+
+How to add an DS3231 I2C realtime clock to the Raspberry Pi B+.
+
+
+= Details =
+
+This is the RTC module bought on aliexpress.com:
+
+http://ecx.images-amazon.com/images/I/41KFXocI%2BsL._SX425_.jpg
+
+==Wiring==
+Connect to the as usual on SDA, SCL, GND and VCC (on 3.3V) pins
+
+==Setting up hardware RTC in Raspbian==
+Most of the setting up is takken from this page:
+http://www.elevendroids.com/2012/12/setting-up-hardware-rtc-in-raspbian/
+
+Thank you to the author: elevendroids
