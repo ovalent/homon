@@ -14,6 +14,14 @@ Thank you to www.richards-tech.com
 '''
 
 import sys
+from optparse import OptionParser
+
+# import LCD class
+from lcd_display import LCD_display
+
+# Now import what we need
+import time
+import datetime
 
 # import the sensor drivers
 sys.path.append('/home/pi/SyntroNet/SyntroPython/SensorDrivers')
@@ -34,21 +42,19 @@ s_temperature = RT_MCP9808.RT_MCP9808()
 s_pressure = RT_BMP180.RT_BMP180()
 s_humidity = RT_HTU21D.RT_HTU21D()
 
-# import LCD class
-from lcd_display import LCD_display
 
-
-# Now import what we need
-import time
-import datetime
 
 '''
 ------------------------------------------------------------
     Sensor functions
 '''
 
-# global to maintain last sensor read time
-lastSensorReadTime = time.time() 
+# global
+# options
+options = 0
+args = 0
+# to maintain last sensor read time
+lastSensorReadTime = time.time()
 
 def initSensors():
     s_light.enable()
@@ -58,6 +64,8 @@ def initSensors():
 
 def readSensors():
     global lastSensorReadTime
+    global options
+    global args
     
     if ((time.time() - lastSensorReadTime) < SENSOR_UPDATE_INTERVAL):
         # call background loops
@@ -71,23 +79,33 @@ def readSensors():
     lastSensorReadTime = time.time()
     
    
-    print(datetime.datetime.now().isoformat())    
+    print_verbose(datetime.datetime.now().isoformat())    
     if s_light.getDataValid():
         lightData = s_light.readLight()
-        print("Light: %.2f lux" % lightData)
+        print_verbose("Light: %.2f lux" % lightData)
     if s_temperature.getDataValid():
         temperatureData = s_temperature.readTemperature()
-        display_lcd.temperature(temperatureData)
-        print("Temperature: %.2f°C" % temperatureData)
+        #display_lcd.temperature(temperatureData)
+        print_verbose("Temperature: %.2f°C" % temperatureData)
     if s_humidity.getDataValid():
         humidityData = s_humidity.readHumidity()
-        display_lcd.humidity(humidityData)
-        print("Humidity: %.2f%%RH" % humidityData)    
+        #display_lcd.humidity(humidityData)
+        print_verbose("Humidity: %.2f%%RH" % humidityData)    
     if s_pressure.getDataValid():
         pressureData = s_pressure.readPressure()
-        display_lcd.pressure(pressureData)
-        print("Pressure: %.2fhPa" % pressureData)        
+        #display_lcd.pressure(pressureData)
+        print_verbose("Pressure: %.2fhPa" % pressureData)        
     
+
+'''
+------------------------------------------------------------
+    tools functions
+'''
+def print_verbose(msg):
+    global options
+    if options.verbose is True:
+        print(msg)
+
 
 '''
 ------------------------------------------------------------
@@ -113,6 +131,16 @@ def mLoop():
 '''
 
 if __name__ == '__main__':
+   
+    #get parameters
+    parser = OptionParser()
+    parser.add_option("-v", "--verbose", action="store_true", dest="verbose", 
+                        help="display sensors values in terminal")
+    parser.add_option("-q", "--quiet", action="store_false", dest="verbose", 
+                        help="does not display anything in terminal [default]")
+    parser.set_defaults(verbose=False)
+    (options, args) = parser.parse_args()
+        
     try:
         display_lcd = LCD_display()
         display_lcd.date()
