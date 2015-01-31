@@ -27,7 +27,7 @@ class LCD_display(object):
         self.lcd.begin(self.num_columns, self.num_lines)
         self.lcd.backlightOn()
         self.lcd.setCursor(0, 0)
-        self.lcd.message(datetime.datetime.now().strftime(' %a %d %b - %H:%M'))
+        #self.lcd.message(datetime.datetime.now().strftime(' %a %d %b - %H:%M'))
         
     def line_message(self, row, text):
         # set the position (row from 0 to 3)

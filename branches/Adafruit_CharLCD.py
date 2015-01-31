@@ -7,9 +7,10 @@
 #
 # added Added backlight functionality from https://code.google.com/p/pi-radio/source/browse/Adafruit_CharLCD.py
 #
+# updated Message function in order to manage 20x4 LCD screens
+#
 
 from time import sleep
-
 
 class Adafruit_CharLCD(object):
 
@@ -204,14 +205,25 @@ class Adafruit_CharLCD(object):
         self.GPIO.output(self.pin_e, False)
         self.delayMicroseconds(1)       # commands need > 37us to settle
 
+    #def message(self, text):
+    #    """ Send string to LCD. Newline wraps to second line"""
+    #    for char in text:
+    #        if char == '\n':
+    #            self.write4bits(0xC0)  # next line
+    #        else:
+    #            self.write4bits(ord(char), True)              
     def message(self, text):
-        """ Send string to LCD. Newline wraps to second line"""
-        for char in text:
-            if char == '\n':
-                self.write4bits(0xC0)  # next line
-            else:
-                self.write4bits(ord(char), True)              
-    
+        """ Send string to LCD. Newline wraps to next line"""
+        lines = str(text).split('\n')       # Split at newline(s)
+        for i, line in enumerate(lines):    # For each substring...
+            if i == 1:                      # If newline(s),
+               self.write4bits(0xC0)        # set DDRAM address to 2nd line
+            elif i == 2:
+               self.write4bits(0x94)
+            elif i >= 3:
+               self.write4bits(0xD4)
+            for char in line:
+                self.write4bits(ord(char),True)
             
     def backlightOn(self):
         self.GPIO.output(self.pin_bl,True)

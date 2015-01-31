@@ -36,7 +36,7 @@ s_humidity = RT_HTU21D.RT_HTU21D()
 
 # import LCD class
 from lcd_display import LCD_display
-display_lcd = LCD_display()
+
 
 # Now import what we need
 import time
@@ -79,14 +79,15 @@ def readSensors():
         temperatureData = s_temperature.readTemperature()
         display_lcd.temperature(temperatureData)
         print("Temperature: %.2f°C" % temperatureData)
-    if s_pressure.getDataValid():
-        pressureData = s_pressure.readPressure()
-        display_lcd.pressure(pressureData)
-        print("Pressure: %.2fhPa" % pressureData)        
     if s_humidity.getDataValid():
         humidityData = s_humidity.readHumidity()
         display_lcd.humidity(humidityData)
         print("Humidity: %.2f%%RH" % humidityData)    
+    if s_pressure.getDataValid():
+        pressureData = s_pressure.readPressure()
+        display_lcd.pressure(pressureData)
+        print("Pressure: %.2fhPa" % pressureData)        
+    
 
 '''
 ------------------------------------------------------------
@@ -113,6 +114,8 @@ def mLoop():
 
 if __name__ == '__main__':
     try:
+        display_lcd = LCD_display()
+        display_lcd.date()
         display_lcd.line_message(2, "   Initializing...")
         initSensors()
         mLoop()
