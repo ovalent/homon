@@ -171,3 +171,5 @@ Don't forget to disable fake-hwclock service and enable hwclock service:
 sudo update-rc.d hwclock.sh enable
 sudo update-rc.d fake-hwclock disable
 }}}
+
+Also nice "how to" here: http://www.raspberrypi.org/forums/viewtopic.php?f=66&t=85683#p636510
