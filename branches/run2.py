@@ -167,9 +167,9 @@ if __name__ == '__main__':
                         help="does not display anything in terminal [default]")
     parser.set_defaults(verbose=False)
     (options, args) = parser.parse_args()
-        
-    try:
-        display_lcd = LCD_display()
+    
+    display_lcd = LCD_display()    
+    try:        
         display_lcd.date()
         display_lcd.line_message(2, "   Initializing...")
         initSensors()
