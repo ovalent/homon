@@ -15,7 +15,7 @@ from lcd_display import LCD_display
 GPIO_CHANEL = 40
 
 # set the time (in seconds) the button has to be pressed before shutdown runs
-WAIT_FOR = 5 
+WAIT_FOR = 3 
 
 # set the mode with pin number (1 to 40)
 GPIO.setmode(GPIO.BOARD)

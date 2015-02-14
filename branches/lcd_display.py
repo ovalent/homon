@@ -59,5 +59,5 @@ class LCD_display(object):
         #set the position
         self.lcd.setCursor(0, 0)
         #display the message and value
-        self.lcd.message(datetime.datetime.now().strftime(' %a %d %b - %H:%M'))
+        self.lcd.message(datetime.datetime.now().strftime(' %a %d %b  %H:%M'))
 

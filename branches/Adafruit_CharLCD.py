@@ -101,6 +101,7 @@ class Adafruit_CharLCD(object):
     def begin(self, cols, lines):
         if (lines > 1):
             self.numlines = lines
+            self.numcols = cols
             self.displayfunction |= self.LCD_2LINE
 
     def home(self):
@@ -192,6 +193,10 @@ class Adafruit_CharLCD(object):
             if bits[i] == "1":
                 self.GPIO.output(self.pins_db[::-1][i-4], True)
         self.pulseEnable()
+    
+    def writestring(self, string):
+        for char in string:
+            self.write4bits(ord(char),True)
 
     def delayMicroseconds(self, microseconds):
         seconds = microseconds / float(1000000)  # divide microseconds by 1 million for seconds
@@ -224,6 +229,37 @@ class Adafruit_CharLCD(object):
                self.write4bits(0xD4)
             for char in line:
                 self.write4bits(ord(char),True)
+    def message2(self, text, limitMode = NO_TRUNCATE):
+        line = ""
+        """ Send string to LCD. Newline wraps to next line"""
+        lines = str(text).split('\n')       # Split at newline(s)
+        for i, line in enumerate(lines):    # For each substring...
+            if i == 1:                      # If newline(s),
+               self.write4bits(0xC0)        # set DDRAM address to 2nd line
+            elif i == 2:
+               self.write4bits(0x94)
+            elif i >= 3:
+               self.write4bits(0xD4)
+           
+            """Now depending on the limit mode set by the function call this will handle """
+            lineLength = len(line)
+            limit = self.numcols
+            if limitMode <= 0: 
+                self.writestring(line)     
+            elif lineLength >= limit and limitMode == 1:
+                '''With the limit mode set to 1 the line is truncated 
+                at the number of columns available on the display'''
+                limitedLine = line[0:self.numcols]
+                self.writestring(limitedLine)  
+            elif lineLength >= limit and limitMode == 2:
+                '''With the limit mode set to 2 the line is truncated 
+                at the number of columns minus 3 to add in an elipse'''
+                limitedLine = line[0:self.numcols-3]+'...'
+                self.writestring(limitedLine)
+            #elif lineLength >= limit and limitMode >= 3:
+                '''Future todo, add in proper, "line after line" cariage return'''
+            else:
+                self.writestring(line)
             
     def backlightOn(self):
         self.GPIO.output(self.pin_bl,True)

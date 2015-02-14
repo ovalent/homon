@@ -20,11 +20,12 @@ from optparse import OptionParser
 from lcd_display import LCD_display
 
 # import a class to get rapsberry pi values (CPU temp, CPU load, Mem)
-from cpu_temperature import RPI_Data
+#from cpu_temperature import RPI_Data
 
 # Now import what we need
 import time
 import datetime
+import requests
 
 # import the sensor drivers
 sys.path.append('/home/pi/SyntroNet/SyntroPython/SensorDrivers')
@@ -37,7 +38,12 @@ import RT_NullSensor
 # the sensor update interval (in seconds). Change as required.
 SENSOR_UPDATE_INTERVAL = 5
 # data upload interval (in seconds). Change as required.
-DATA_UPLOAD_INTERVAL = 60
+DOMOTICZ_UPLOAD_INTERVAL = 60
+
+# Domoticz settings
+DOMZ_URL = "http://localhost:8080"
+DOMZ_TEMP_HUM_PRESS = "/json.htm?type=command&param=udevice&idx=14055&nvalue=0&svalue=sTEMP;sHUM;sHUSTAT;sBAR;sBAFOR"
+DOMZ_LUX = "/json.htm?type=command&param=udevice&idx=82006&svalue=sLUX"
 
 # The set of sensors. Choose which ones are required or use NullSensor if no physical sensor
 # Multi sensor objects (such as BMP180 for temp and pressure) can be reused
@@ -48,7 +54,7 @@ s_pressure = RT_BMP180.RT_BMP180()
 s_humidity = RT_HTU21D.RT_HTU21D()
 
 # Raspberry Pi Data class (cpu temperature, CPU load, memory)
-s_rpi = RPI_Data()
+#s_rpi = RPI_Data()
 
 
 '''
@@ -62,6 +68,8 @@ options = 0
 args = 0
 # to maintain last sensor read time
 lastSensorReadTime = time.time()
+# tom maintain last domoticz send data
+lastDomoticzSendTime = lastSensorReadTime
 
 def initSensors():
     s_light.enable()
@@ -71,6 +79,7 @@ def initSensors():
 
 def readSensors():
     global lastSensorReadTime
+    global lastDomoticzSendTime
     global options
     global args
     
@@ -113,16 +122,39 @@ def readSensors():
         print_verbose("BMP180 Pressure: %.2fhPa" % pressureData)
         print_verbose("BMP180 Temperature: %.2f°C" % pressureTemperatureData)    
     # raspberry pi CPU temperature
-    rpiTempetatureData = s_rpi.readTemperature()
-    print_verbose("RPI Temperature: %.2f°C" % rpiTempetatureData)  
+    #rpiTempetatureData = s_rpi.readTemperature()
+    #print_verbose("RPI Temperature: %.2f°C" % rpiTempetatureData)  
     
     # build string to display to LCD
-    lcd_string = " " + datetime.datetime.now().strftime(' %a %d %b - %H:%M') + "\n"
+    lcd_string = " " + datetime.datetime.now().strftime(' %a %d %b  %H:%M') + "\n"
     lcd_string = lcd_string + "Temperature: %.2f" % temperatureData + chr(223) + "C" + "\n" # chr(223) stand to replace degree "°" symbol
     lcd_string = lcd_string + "Humidity:   %.2f%%RH" % humidityData + "\n"
     lcd_string = lcd_string + "Pressure: %.2fhPa" % pressureData
     # display it on LCD  
     display_lcd.lcd.message(lcd_string)
+    
+    
+    # send data to domoticz server every "DOMOTICZ_UPLOAD_INTERVAL" seconds
+    if ((time.time() - lastDomoticzSendTime) < DOMOTICZ_UPLOAD_INTERVAL):
+        return
+    lastDomoticzSendTime = time.time()
+    print_verbose("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")       
+    print_verbose("Send last data to Domoticz")   
+    print_verbose("$$$$$$$$$$$$$$$$$$$$$$$$$$")        
+    # Replace values in the THP url string
+    url_req_THP = DOMZ_TEMP_HUM_PRESS.replace("sTEMP", "%.2f" % temperatureData)
+    url_req_THP = url_req_THP.replace("sHUM", "%.2f" % humidityData)
+    url_req_THP = url_req_THP.replace("sHUSTAT", "")
+    url_req_THP = url_req_THP.replace("sBAR", "%.2f" % pressureData)
+    url_req_THP = url_req_THP.replace("sBAFOR", "")
+    # Replace values in the LUX url string
+    url_req_LUX = DOMZ_LUX.replace("sLUX", "%.2f" % lightData)
+    # send the THP request
+    print_verbose(url_req_THP)
+    #rTHP = requests.get(DOMZ_URL + url_req_THP)  
+    # send the LUX request
+    #rLUX = requests.get(DOMZ_URL + url_req_LUX)  
+    print_verbose(url_req_LUX)
     
 
 '''
