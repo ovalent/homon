@@ -140,7 +140,7 @@ def readSensors():
     lastDomoticzSendTime = time.time()
     print_verbose("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")       
     print_verbose("Send last data to Domoticz")   
-    print_verbose("$$$$$$$$$$$$$$$$$$$$$$$$$$")        
+           
     # Replace values in the THP url string
     url_req_THP = DOMZ_TEMP_HUM_PRESS.replace("sTEMP", "%.2f" % temperatureData)
     url_req_THP = url_req_THP.replace("sHUM", "%.2f" % humidityData)
@@ -155,6 +155,7 @@ def readSensors():
     # send the LUX request
     #rLUX = requests.get(DOMZ_URL + url_req_LUX)  
     print_verbose(url_req_LUX)
+    print_verbose("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")       
     
 
 '''
@@ -180,7 +181,7 @@ def mLoop():
     while True:        
         # see if anything from the sensors
         readSensors()
-            
+        
         # give other things a chance
         time.sleep(0.02)
 
@@ -191,6 +192,7 @@ def mLoop():
 
 if __name__ == '__main__':
    
+    time.sleep(1)
     #get parameters
     parser = OptionParser()
     parser.add_option("-v", "--verbose", action="store_true", dest="verbose", 

@@ -14,13 +14,14 @@ class LCD_display(object):
     num_columns = 20
     num_lines = 4
     
-    def __init__(self):
+    def __init__(self, init=True):
         # Create MCP230xx GPIO adapter.
         mcp = MCP230XX_GPIO(self.bus, self.address, self.gpio_count)
 
         # Create LCD, passing in MCP GPIO adapter.
         self.lcd = Adafruit_CharLCD(pin_rs=1, pin_e=2, pin_bl=7, pins_db=[3,4,5,6], GPIO=mcp)
-        self.initialisation()
+        if init:
+            self.initialisation()
     
     def initialisation(self):
         self.lcd.clear()
