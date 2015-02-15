@@ -42,8 +42,8 @@ DOMOTICZ_UPLOAD_INTERVAL = 60
 
 # Domoticz settings
 DOMZ_URL = "http://localhost:8080"
-DOMZ_TEMP_HUM_PRESS = "/json.htm?type=command&param=udevice&idx=14055&nvalue=0&svalue=sTEMP;sHUM;sHUSTAT;sBAR;sBAFOR"
-DOMZ_LUX = "/json.htm?type=command&param=udevice&idx=82006&svalue=sLUX"
+DOMZ_TEMP_HUM_PRESS = "/json.htm?type=command&param=udevice&idx=8&nvalue=0&svalue=sTEMP;sHUM;sHUSTAT;sBAR;sBAFOR"
+DOMZ_LUX = "/json.htm?type=command&param=udevice&idx=7&svalue=sLUX"
 
 # The set of sensors. Choose which ones are required or use NullSensor if no physical sensor
 # Multi sensor objects (such as BMP180 for temp and pressure) can be reused
@@ -144,17 +144,19 @@ def readSensors():
     # Replace values in the THP url string
     url_req_THP = DOMZ_TEMP_HUM_PRESS.replace("sTEMP", "%.2f" % temperatureData)
     url_req_THP = url_req_THP.replace("sHUM", "%.2f" % humidityData)
-    url_req_THP = url_req_THP.replace("sHUSTAT", "")
+    url_req_THP = url_req_THP.replace("sHUSTAT", "0")
     url_req_THP = url_req_THP.replace("sBAR", "%.2f" % pressureData)
-    url_req_THP = url_req_THP.replace("sBAFOR", "")
+    url_req_THP = url_req_THP.replace("sBAFOR", "0")
     # Replace values in the LUX url string
     url_req_LUX = DOMZ_LUX.replace("sLUX", "%.2f" % lightData)
     # send the THP request
-    print_verbose(url_req_THP)
-    #rTHP = requests.get(DOMZ_URL + url_req_THP)  
+    print_verbose(DOMZ_URL + url_req_THP)
+    rTHP = requests.get(DOMZ_URL + url_req_THP)  
+    print_verbose(rTHP)
     # send the LUX request
-    #rLUX = requests.get(DOMZ_URL + url_req_LUX)  
-    print_verbose(url_req_LUX)
+    print_verbose(DOMZ_URL + url_req_LUX)
+    rLUX = requests.get(DOMZ_URL + url_req_LUX)      
+    print_verbose(rLUX)
     print_verbose("$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$$")       
     
 
@@ -167,7 +169,20 @@ def print_verbose(msg):
     if options.verbose is True:
         print(msg)
 
-
+'''
+def format_line(msg1, msg2, justify="left", len=20):
+    lpad = ""
+    mpad = ""
+    rpad = ""
+    
+    if msg2 == "":
+        if justify == "center";
+            
+    
+    msg_formatted = lpad + msg1 + mpad + msg2 + rpad
+    return msg_formatted
+'''
+    
 '''
 ------------------------------------------------------------
     Main loop function
