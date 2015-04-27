@@ -1,0 +1,52 @@
+# Introduction #
+
+how to update rasbian distribution on Raspberry Pi
+
+
+# Details #
+
+How Can I keep My Raspbian “Wheezy” Up to Date?
+
+http://raspberrypi.stackexchange.com/questions/4698/how-can-i-keep-my-raspbian-wheezy-up-to-date
+
+**Dist:**
+
+This updates the list of available packages and their versions, but it does not install or upgrade any packages.
+```
+$ sudo apt-get update
+```
+This actually installs newer versions of the packages you have. After updating the lists, the package manager knows about available updates for the software you have installed.
+```
+$ sudo apt-get upgrade
+```
+This will then remove all of the reduntant packages after the latest upgrade
+```
+$ sudo apt-get autoremove
+```
+Also be aware that downloaded package files (.deb files) are kept in /var/cache/apt/archives. You can remove these in order to free up space with
+```
+$ sudo apt-get clean.
+```
+
+**Rpi-update first time:** (optional) install git and certifications for reach github.
+
+```
+$ sudo apt-get install ca-certificates
+$ sudo apt-get install git-core
+$ sudo wget http://goo.gl/1BOfJ -O /usr/bin/rpi-update
+$ sudo chmod +x /usr/bin/rpi-update
+```
+
+**Update firmware:**
+```
+$ sudo rpi-update
+$ sudo ldconfig
+$ sudo reboot
+```
+
+**Rpi-update after:**
+```
+$ sudo rpi-update
+$ sudo ldconfig
+$ sudo reboot
+```

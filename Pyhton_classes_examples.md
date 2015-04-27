@@ -1,0 +1,12 @@
+# Introduction #
+
+Work with classes with python. Links and examples.
+
+
+# Details #
+
+http://stackoverflow.com/questions/7870869/python-main-call-within-class
+
+http://stackoverflow.com/questions/4142151/python-how-to-import-the-class-within-the-same-directory-or-sub-directory
+
+http://www.stuffaboutcode.com/2013/12/raspberry-pi-python-temp-sensor-ds18b20.html
